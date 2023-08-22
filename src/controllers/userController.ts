@@ -1,4 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import catchAsync from "../utils/catchAsync.js";
+import User from "../models/userModel.js";
+import AppError from "../utils/appError.js";
 
 export const getAllUsers = (req: Request, res: Response) => {
   res
@@ -6,23 +9,28 @@ export const getAllUsers = (req: Request, res: Response) => {
     .json({ status: "fail", message: "A rota ainda não foi definida" });
 };
 
-export const getUser = (req: Request, res: Response) => {
-  res
-    .status(500)
-    .json({ status: "fail", message: "A rota ainda não foi definida" });
-};
+export const getUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.id;
 
-export const createUser = (req: Request, res: Response) => {
-  console.log(req.body);
-  res
-    .status(500)
-    .json({ status: "fail", message: "A rota ainda não foi definida" });
-};
+    const user = await User.findById(userId).select("-__v");
+
+    if (!user) {
+      return next(
+        new AppError("Não foi encontrado um usuário com essa ID", 404)
+      );
+    }
+
+    res.status(201).json({ status: "success", data: { user } });
+  }
+);
+
 export const updateUser = (req: Request, res: Response) => {
   res
     .status(500)
     .json({ status: "fail", message: "A rota ainda não foi definida" });
 };
+
 export const deleteUser = (req: Request, res: Response) => {
   res
     .status(500)

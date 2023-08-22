@@ -1,7 +1,6 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import {
   getAllUsers,
-  createUser,
   getUser,
   updateUser,
   deleteUser,
@@ -12,15 +11,7 @@ const router = express.Router();
 
 router.post("/signup", signup);
 
-router.param(
-  "id",
-  (req: Request, res: Response, next: NextFunction, val: string) => {
-    console.log(`O id é ${val}`);
-    next();
-  }
-);
-
-router.route("/").get(getAllUsers).post(createUser);
+router.route("/").get(getAllUsers);
 
 router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
 
