@@ -3,11 +3,16 @@ import catchAsync from "../utils/catchAsync.js";
 import User from "../models/userModel.js";
 import AppError from "../utils/appError.js";
 
-export const getAllUsers = (req: Request, res: Response) => {
-  res
-    .status(500)
-    .json({ status: "fail", message: "A rota ainda não foi definida" });
-};
+export const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  const users = await User.find();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      users,
+    },
+  });
+});
 
 export const getUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

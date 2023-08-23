@@ -1,15 +1,19 @@
 import { NextFunction } from "express";
-import { Schema, model, Document } from "mongoose";
+import { Model, Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
 import AppError from "../utils/appError.js";
 
-export interface IUser extends Document {
+interface IUser extends Document {
   name: string;
   email: string;
-  photo: string;
+  photo?: string;
   password: string;
   passwordConfirm: string;
-  createdAt: Date;
+  createdAt?: Date;
+  correctPassword: (
+    candidatePassword: string,
+    userPassword: string
+  ) => Promise<boolean>;
 }
 
 const userSchema = new Schema<IUser>({
@@ -61,15 +65,22 @@ const userSchema = new Schema<IUser>({
 userSchema.pre("save", async function (next: NextFunction) {
   if (!this.isModified("password")) return next();
   try {
-    (this as IUser).password = await bcrypt.hash((this as IUser).password, 12);
+    this.password = await bcrypt.hash(this.password, 12);
 
-    (this as IUser).passwordConfirm = undefined;
+    this.passwordConfirm = undefined;
     next();
   } catch (err) {
     next(new AppError("Houve um erro na criptografia da senha", 500));
   }
 });
 
-const User = model<IUser>("User", userSchema);
+userSchema.methods.correctPassword = async function (
+  candidatePassword: string,
+  userPassword: string
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+const User = model<IUser, Model<IUser>>("User", userSchema);
 
 export default User;
