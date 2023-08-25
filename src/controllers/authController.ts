@@ -6,10 +6,8 @@ import AppError from "../utils/appError.js";
 
 interface NewUserRequest extends Request {
   body: {
-    name: string;
     email: string;
     password: string;
-    passwordConfirm: string;
   };
 }
 
@@ -28,10 +26,8 @@ const signToken = (id: string) => {
 
 export const signup = catchAsync(async (req: NewUserRequest, res: Response) => {
   const newUser = await User.create({
-    name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
   });
 
   const token = signToken(newUser._id.toString());
@@ -39,12 +35,9 @@ export const signup = catchAsync(async (req: NewUserRequest, res: Response) => {
   res.status(201).json({
     status: "success",
     token,
-    data: {
-      user: {
-        name: newUser.name,
-        email: newUser.email,
-        _id: newUser._id,
-      },
+    user: {
+      id: newUser._id,
+      email: newUser.email,
     },
   });
 });
@@ -54,17 +47,22 @@ export const login = catchAsync(
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return next(new AppError("Email ou senha não foram definidos", 400));
+      return next(new AppError("email ou senha não foram definidos", 400));
     }
 
     const user = await User.findOne({ email }).select("+password");
 
     if (!user || !(await user.correctPassword(password, user.password))) {
-      return next(new AppError("Usuário ou Senha estão incorretos", 401));
+      return next(new AppError("email ou senha estão incorretos", 401));
     }
+
+    const loggedUser = {
+      id: user._id,
+      email: user.email,
+    };
 
     const token = signToken(user._id.toString());
 
-    res.status(200).json({ status: "success", token });
+    res.status(200).json({ status: "success", user: loggedUser, token });
   }
 );

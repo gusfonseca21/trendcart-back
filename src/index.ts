@@ -2,8 +2,16 @@ import express, { NextFunction, Request, Response } from "express";
 import { default as usersRouter } from "./routes/userRoutes.js";
 import AppError from "./utils/appError.js";
 import globalErrorHandler from "./controllers/errorController.js";
+import cors from "cors";
+import "dotenv/config";
 
 const app = express();
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+  })
+);
 
 app.use(express.json());
 

@@ -4,11 +4,9 @@ import bcrypt from "bcryptjs";
 import AppError from "../utils/appError.js";
 
 interface IUser extends Document {
-  name: string;
   email: string;
   photo?: string;
   password: string;
-  passwordConfirm: string;
   createdAt?: Date;
   correctPassword: (
     candidatePassword: string,
@@ -17,13 +15,6 @@ interface IUser extends Document {
 }
 
 const userSchema = new Schema<IUser>({
-  name: {
-    type: String,
-    required: [true, "Defina um nome"],
-    trim: true,
-    maxLength: [25, "O nome deve conter, no máximo, 25 caracteres"],
-    minLength: [5, "O nome deve ter, no mínimo, cinco caracteres"],
-  },
   email: {
     type: String,
     required: [true, "Defina um email"],
@@ -44,17 +35,6 @@ const userSchema = new Schema<IUser>({
     minlength: [4, "A senha deve possuir pelo menos quatro caracteres"],
     select: false,
   },
-  passwordConfirm: {
-    type: String,
-    required: [true, "Confirme a senha"],
-    select: false,
-    validate: {
-      validator: function (value: string) {
-        return (this as IUser).password === value;
-      },
-      message: "As senhas não coincidem",
-    },
-  },
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -67,7 +47,6 @@ userSchema.pre("save", async function (next: NextFunction) {
   try {
     this.password = await bcrypt.hash(this.password, 12);
 
-    this.passwordConfirm = undefined;
     next();
   } catch (err) {
     next(new AppError("Houve um erro na criptografia da senha", 500));
