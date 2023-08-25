@@ -5,7 +5,6 @@ import AppError from "../utils/appError.js";
 
 interface IUser extends Document {
   email: string;
-  photo?: string;
   password: string;
   createdAt?: Date;
   correctPassword: (
@@ -28,7 +27,6 @@ const userSchema = new Schema<IUser>({
       message: "Defina um email válido",
     },
   },
-  photo: String,
   password: {
     type: String,
     required: [true, "Defina uma senha"],

@@ -7,7 +7,7 @@ const handleCastErrorDB = (error: AppError) => {
 
 const handleDuplicateFieldsDB = (error: AppError) => {
   const value = error.errmsg.match(/(["'])(?:(?=(\\?))\2.)*?\1/);
-  return new AppError(`Campo duplicado: ${value[0]}`, 400);
+  return new AppError(`${value[0]} já está cadastrado`, 400);
 };
 
 const handleValidationErrorDB = (error: AppError) => {
