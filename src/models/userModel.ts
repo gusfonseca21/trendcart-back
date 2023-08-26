@@ -3,7 +3,7 @@ import { Model, Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
 import AppError from "../utils/appError.js";
 
-interface IUser extends Document {
+export interface IUser extends Document {
   email: string;
   password: string;
   createdAt?: Date;
