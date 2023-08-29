@@ -17,6 +17,7 @@ type Product = {
   price: string;
   description: string;
   images: string[];
+  bannerImage?: string;
   colors: Color[];
   rating: number;
   reviews: {
@@ -52,6 +53,7 @@ const products: Product[] = [
     images: ["product-pendant-lamp", "product-pendant-lamp-2"],
     colors: ["Marrom", "Cinza", "Branco"],
     rating: 4,
+    bannerImage: "slider-pendant-lighting",
     reviews: [],
   },
   {
@@ -72,6 +74,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-wall-clock", "product-wall-clock-2"],
+    bannerImage: "slider-wall-clock",
     colors: ["Verde", "Laranja"],
     rating: 4,
     reviews: [],
@@ -85,17 +88,6 @@ const products: Product[] = [
     images: ["product-hans-backpack", "product-hans-backpack-2"],
     colors: ["Marrom"],
     rating: 3,
-    reviews: [],
-  },
-  {
-    name: "Óculos Specs",
-    category: "Essenciais",
-    price: "109.00",
-    description:
-      "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
-    images: ["product-hans-backpack", "product-hans-backpack-2"],
-    colors: ["Marrom"],
-    rating: 4,
     reviews: [],
   },
   {
@@ -424,12 +416,13 @@ const products: Product[] = [
     reviews: [],
   },
   {
-    name: "Cesto Trançado",
+    name: "Cesta Trançado",
     category: "Interior",
     price: "59.00",
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-plaited-basket", "product-plaited-basket-2"],
+    bannerImage: "slider-basket",
     colors: ["Laranja", "Azul"],
     rating: 4,
     reviews: [],

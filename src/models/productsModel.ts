@@ -18,12 +18,13 @@ type Review = {
   comment: string;
 };
 
-interface IProduct extends Document {
+export interface IProduct extends Document {
   name: string;
   category: "Bolsas e Mochilas" | "Decoração" | "Essenciais" | "Interior";
   price: string;
   description: string;
   images: string[];
+  bannerImage?: string;
   colors: Color[];
   ratingsAverage: number;
   reviews: Review[];
@@ -53,6 +54,9 @@ const productSchema = new Schema<IProduct>({
   images: {
     type: [String],
     required: [true, "É preciso ter um array de fotos"],
+  },
+  bannerImage: {
+    type: String,
   },
   colors: {
     type: [String],

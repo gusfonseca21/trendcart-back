@@ -6,6 +6,7 @@ import AppError from "../utils/appError.js";
 export interface IUser extends Document {
   email: string;
   password: string;
+  photo: string;
   createdAt?: Date;
   correctPassword: (
     candidatePassword: string,
@@ -32,6 +33,9 @@ const userSchema = new Schema<IUser>({
     required: [true, "Defina uma senha"],
     minlength: [4, "A senha deve possuir pelo menos quatro caracteres"],
     select: false,
+  },
+  photo: {
+    type: String,
   },
   createdAt: {
     type: Date,
