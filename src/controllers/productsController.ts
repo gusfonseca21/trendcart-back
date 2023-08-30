@@ -5,7 +5,9 @@ import catchAsync from "../utils/catchAsync.js";
 export const heroProducts = catchAsync(async (req: Request, res: Response) => {
   const heroProducts = await Product.find({
     bannerImage: { $exists: true },
-  }).select("-price -description -images -colors -ratingsAverage -reviews");
+  }).select(
+    "-price -description -images -colors -ratingsAverage -reviews -__v"
+  );
 
   res.status(200).json({ status: "success", data: heroProducts });
 });
