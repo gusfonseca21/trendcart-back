@@ -24,7 +24,10 @@ export interface IProduct extends Document {
   price: string;
   description: string;
   images: string[];
-  bannerImage?: string;
+  hero?: {
+    image: string;
+    title: string;
+  };
   colors: Color[];
   ratingsAverage: number;
   reviews: Review[];
@@ -55,8 +58,9 @@ const productSchema = new Schema<IProduct>({
     type: [String],
     required: [true, "É preciso ter um array de fotos"],
   },
-  bannerImage: {
-    type: String,
+  hero: {
+    image: String,
+    title: String,
   },
   colors: {
     type: [String],

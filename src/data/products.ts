@@ -17,7 +17,10 @@ type Product = {
   price: string;
   description: string;
   images: string[];
-  bannerImage?: string;
+  hero?: {
+    image: string;
+    title: string;
+  };
   colors: Color[];
   rating: number;
   reviews: {
@@ -53,7 +56,10 @@ const products: Product[] = [
     images: ["product-pendant-lamp", "product-pendant-lamp-2"],
     colors: ["Marrom", "Cinza", "Branco"],
     rating: 4,
-    bannerImage: "slider-pendant-lighting",
+    hero: {
+      image: "slider-pendant-lighting",
+      title: "Iluminação Pendente Contemporânea",
+    },
     reviews: [],
   },
   {
@@ -74,7 +80,10 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-wall-clock", "product-wall-clock-2"],
-    bannerImage: "slider-wall-clock",
+    hero: {
+      image: "slider-wall-clock",
+      title: "Relógio de Parede com Disco Giratório Minimalista",
+    },
     colors: ["Verde", "Laranja"],
     rating: 4,
     reviews: [],
@@ -422,7 +431,10 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-plaited-basket", "product-plaited-basket-2"],
-    bannerImage: "slider-basket",
+    hero: {
+      image: "slider-basket",
+      title: "Cesto com Padrão Zigue-zague de Bambu",
+    },
     colors: ["Laranja", "Azul"],
     rating: 4,
     reviews: [],
@@ -483,34 +495,12 @@ const products: Product[] = [
     reviews: [],
   },
   {
-    name: "Cabides Multicoloridos",
-    category: "Interior",
-    price: "12.00",
-    description:
-      "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
-    images: ["product-multicolor-hangers", "product-multicolor-hangers-2"],
-    colors: [],
-    rating: 4,
-    reviews: [],
-  },
-  {
     name: "Porta-Copos Coloridos",
     category: "Decoração",
     price: "19.00",
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-multicolor-hangers", "product-multicolor-hangers-2"],
-    colors: ["Laranja", "Verde"],
-    rating: 4,
-    reviews: [],
-  },
-  {
-    name: "Porta-Copos Coloridos",
-    category: "Decoração",
-    price: "19.00",
-    description:
-      "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
-    images: ["product-colourful-coasters", "product-colourful-coasters-2"],
     colors: ["Laranja", "Verde"],
     rating: 4,
     reviews: [],
