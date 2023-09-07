@@ -4,7 +4,15 @@ import catchAsync from "../utils/catchAsync.js";
 
 export const getAllProducts = catchAsync(
   async (req: Request, res: Response) => {
-    const products = await Product.find();
+    let products = [];
+
+    const filter = req.query.filter;
+
+    if (filter === "all") {
+      products = await Product.find().select(
+        "-category -description -hero -ratingsAverage -reviews"
+      );
+    }
 
     res.status(200).json({ status: "success", data: products });
   }

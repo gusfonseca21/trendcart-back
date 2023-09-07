@@ -467,7 +467,11 @@ const products: Product[] = [
     price: "190.00",
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
-    images: ["product-emil-backpack", "product-emil-backpack-2"],
+    images: [
+      "product-solo-headphones",
+      "product-solo-headphones-2",
+      "product-solo-headphones-3",
+    ],
     colors: ["Branco", "Marrom"],
     rating: 4,
     reviews: [],
@@ -489,7 +493,7 @@ const products: Product[] = [
     price: "12.00",
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
-    images: ["product-wooden-dispencer", "product-wooden-dispencer-2"],
+    images: ["product-multicolor-hangers", "product-multicolor-hangers-2"],
     colors: [],
     rating: 4,
     reviews: [],
@@ -500,7 +504,7 @@ const products: Product[] = [
     price: "19.00",
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
-    images: ["product-multicolor-hangers", "product-multicolor-hangers-2"],
+    images: ["product-colourful-coasters", "product-colourful-coasters-2"],
     colors: ["Laranja", "Verde"],
     rating: 4,
     reviews: [],
