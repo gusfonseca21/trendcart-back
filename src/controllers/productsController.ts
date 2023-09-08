@@ -15,24 +15,27 @@ export const getAllProducts = catchAsync(
     const limit = 12;
     const skip = (page - 1) * limit;
 
+    let numProducts: number = 0;
+
     if (filter === "Todos") {
       products = await Product.find()
         .select(ignoredFields)
         .skip(skip)
         .limit(limit);
+      numProducts = await Product.countDocuments();
     } else {
       products = await Product.find({ category: filter })
         .select(ignoredFields)
         .skip(skip)
         .limit(limit);
-    }
 
-    const numProducts = await Product.countDocuments();
+      numProducts = await Product.find({ category: filter }).countDocuments();
+    }
 
     res.status(200).json({
       status: "success",
       data: products,
-      lastPage: skip + limit >= numProducts,
+      isLastPage: skip + limit >= numProducts,
     });
   }
 );
