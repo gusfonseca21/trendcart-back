@@ -10,6 +10,7 @@ export const getAllProducts = catchAsync(
       "-category -description -hero -ratingsAverage -reviews";
 
     const filter = req.query.filter;
+    const sort = req.query.sort as string;
 
     const page = Number(req.query.page) * 1 || 1;
     const limit = 12;
@@ -21,13 +22,15 @@ export const getAllProducts = catchAsync(
       products = await Product.find()
         .select(ignoredFields)
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .sort(sort);
       numProducts = await Product.countDocuments();
     } else {
       products = await Product.find({ category: filter })
         .select(ignoredFields)
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .sort(sort);
 
       numProducts = await Product.find({ category: filter }).countDocuments();
     }

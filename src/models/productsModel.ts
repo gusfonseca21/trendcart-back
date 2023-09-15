@@ -21,7 +21,7 @@ type Review = {
 export interface IProduct extends Document {
   name: string;
   category: "Bolsas e Mochilas" | "Decoração" | "Essenciais" | "Interior";
-  price: string;
+  price: number;
   description: string;
   images: string[];
   hero?: {
@@ -47,7 +47,7 @@ const productSchema = new Schema<IProduct>({
     required: [true, "É preciso ter uma categoria"],
   },
   price: {
-    type: String,
+    type: Number,
     required: [true, "É preciso ter um preço"],
   },
   description: {
