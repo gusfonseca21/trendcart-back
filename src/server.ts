@@ -1,5 +1,6 @@
 import app from "./index.js";
 import mongoose from "mongoose";
+import { Server } from "http";
 import "dotenv/config";
 
 process.on("uncaughtException", (err: Error) => {
@@ -13,13 +14,17 @@ process.on("uncaughtException", (err: Error) => {
 const DB = process.env.DATABASE;
 
 void (async () => {
-  await mongoose.connect(DB);
-  console.log("Servidor conectado com sucesso");
+  if (DB) {
+    await mongoose.connect(DB);
+    console.log("Servidor conectado com sucesso");
+  } else {
+    console.log("Não há base de dados definida");
+  }
 })();
 
 const port = 8080;
 
-const server = app.listen(port, () => {
+const server: Server = app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
 

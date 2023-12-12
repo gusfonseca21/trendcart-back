@@ -6,8 +6,10 @@ import products from "./products.js";
 const DB = process.env.DATABASE;
 
 void (async () => {
-  await mongoose.connect(DB);
-  console.log("Servidor conectado com sucesso");
+  if (DB) {
+    await mongoose.connect(DB);
+    console.log("Servidor conectado com sucesso");
+  } else console.log("Base de dados não definida");
 })();
 
 // IMPORTAR DADOS NA DB

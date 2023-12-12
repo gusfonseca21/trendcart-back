@@ -19,7 +19,8 @@ interface loginRequest extends Request {
 }
 
 const signToken = (id: string) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  const token = process.env.JWT_SECRET ?? "";
+  return jwt.sign({ id }, token, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
