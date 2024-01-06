@@ -48,7 +48,6 @@ userSchema.pre("save", async function (next: NextFunction) {
   if (!this.isModified("password")) return next();
   try {
     this.password = await bcrypt.hash(this.password, 12);
-
     next();
   } catch (err) {
     next(new AppError("Houve um erro na criptografia da senha", 500));

@@ -59,6 +59,5 @@ export const getProduct = catchAsync(async (req: Request, res: Response) => {
   const requestedId = req.params.id;
   const product = await Product.findById(requestedId).select("-__v");
 
-  console.log(product);
   res.status(200).json({ status: "success", data: product });
 });
