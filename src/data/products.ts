@@ -43,7 +43,7 @@ const products: Product[] = [
       "product-classic-chair-2",
       "product-classic-chair-3",
     ],
-    colors: ["Preto", "Bege", "Marrom"],
+    colors: ["Preto"],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -54,7 +54,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-pendant-lamp", "product-pendant-lamp-2"],
-    colors: ["Marrom", "Cinza", "Branco"],
+    colors: [],
     ratingsAverage: 4,
     hero: {
       image: "slider-pendant-lighting",
@@ -79,7 +79,7 @@ const products: Product[] = [
     price: 79,
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
-    images: ["product-wall-clock", "product-wall-clock-2"],
+    images: ["product-wall-clock-2", "product-wall-clock"],
     hero: {
       image: "slider-wall-clock",
       title: "Relógio de Parede com Disco Giratório Minimalista",
@@ -95,7 +95,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-hans-backpack", "product-hans-backpack-2"],
-    colors: ["Marrom"],
+    colors: [],
     ratingsAverage: 3,
     reviews: [],
   },
@@ -106,7 +106,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-specs-sunglasses", "product-specs-sunglasses-2"],
-    colors: ["Marrom"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -139,7 +139,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-laptop-bag", "product-laptop-bag-2"],
-    colors: ["Azul"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -175,7 +175,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-canvas-basket", "product-canvas-basket-2"],
-    colors: ["Branco"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -208,7 +208,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-henry-backpack", "product-henry-backpack-2"],
-    colors: ["Azul"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -230,7 +230,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-round-tray-table", "product-round-tray-table-2"],
-    colors: ["Branco"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -241,7 +241,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-ceramic-watch", "product-ceramic-watch-2"],
-    colors: ["Cinza", "Verde", "Laranja"],
+    colors: ["Laranja", "Verde"],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -296,7 +296,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-bathroom-set", "product-bathroom-set-2"],
-    colors: ["Branco"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -340,7 +340,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-wedge-slippers", "product-wedge-slippers-2"],
-    colors: ["Cinza"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -351,7 +351,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-navy-bag", "product-navy-bag-2"],
-    colors: ["Azul", "Verde"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -362,7 +362,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-jersey-backpack", "product-jersey-backpack-2"],
-    colors: ["Cinza"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -387,7 +387,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-stained-glass-vase", "product-stained-glass-vase-2"],
-    colors: ["Azul", "Laranja"],
+    colors: ["Laranja", "Azul"],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -409,7 +409,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-adrian-wash-bag", "product-adrian-wash-bag-2"],
-    colors: ["Azul"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -457,7 +457,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-emil-backpack", "product-emil-backpack-2"],
-    colors: ["Azul"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -467,11 +467,7 @@ const products: Product[] = [
     price: 190,
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
-    images: [
-      "product-solo-headphones",
-      "product-solo-headphones-2",
-      "product-solo-headphones-3",
-    ],
+    images: ["product-solo-headphones", "product-solo-headphones-2"],
     colors: ["Branco", "Marrom"],
     ratingsAverage: 4,
     reviews: [],
@@ -516,7 +512,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-embrodiered-slippers", "product-embrodiered-slippers-2"],
-    colors: ["Azul"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -527,7 +523,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-multi-device-bag", "product-multi-device-bag-2"],
-    colors: ["Cinza"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -538,7 +534,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-folder-calendar", "product-folder-calendar-2"],
-    colors: ["Azul", "Laranja"],
+    colors: ["Verde", "Laranja"],
     ratingsAverage: 4,
     reviews: [],
   },
@@ -549,7 +545,7 @@ const products: Product[] = [
     description:
       "Projetada para simplicidade e feita com materiais de alta qualidade. Sua geometria elegante e combinações de materiais criam um visual moderno e personalizado.",
     images: ["product-wood-tray", "product-wood-tray-2"],
-    colors: ["Branco"],
+    colors: [],
     ratingsAverage: 4,
     reviews: [],
   },
