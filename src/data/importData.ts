@@ -35,9 +35,17 @@ async function deleteData() {
 const commandArgument = process.argv[2];
 
 if (commandArgument === "--import") {
-  await importData();
-  process.exit();
+  importData()
+    .then(() => process.exit())
+    .catch((err) => {
+      console.error(err);
+      process.exit(1); // Optional: Exit with a non-zero code to indicate failure
+    });
 } else if (commandArgument === "--delete") {
-  await deleteData();
-  process.exit();
+  deleteData()
+    .then(() => process.exit())
+    .catch((err) => {
+      console.error(err);
+      process.exit(1); // Optional: Exit with a non-zero code to indicate failure
+    });
 }

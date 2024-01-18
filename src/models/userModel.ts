@@ -6,7 +6,7 @@ import AppError from "../utils/appError.js";
 export interface IUser extends Document {
   email: string;
   password: string;
-  photo: string;
+  photo: string | null;
   createdAt?: Date;
   correctPassword: (
     candidatePassword: string,

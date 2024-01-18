@@ -1,0 +1,1 @@
+Para fazer a importação e exportação dos dados de produtos primeiro é preciso rodar o comando "tsc" no terminal para converter os arquivos em TS para JS e depois rodar o comando "npx ts-node .\src\data\importData.ts --delete"
