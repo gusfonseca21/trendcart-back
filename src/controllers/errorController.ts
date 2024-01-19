@@ -35,6 +35,14 @@ const productionError = (err: AppError, res: Response) => {
   }
 };
 
+const handleJWTError = () =>
+  new AppError("Token Inválido. Faça o login novamente", 401);
+
+const handleJWTExpiredError = () => {
+  console.log("first");
+  return new AppError("O Token expirou. Faça o login novamente", 401);
+};
+
 const globalErrorHandler = (
   err: AppError,
   req: Request,
@@ -51,10 +59,10 @@ const globalErrorHandler = (
   } else if (process.env.NODE_ENV === "production") {
     let newError = err;
     if (err.name === "CastError") newError = handleCastErrorDB(err);
-
     if (err.code === 11000) newError = handleDuplicateFieldsDB(err);
-
     if (err.name === "ValidationError") newError = handleValidationErrorDB(err);
+    if (err.name === "JsonWebTokenError") newError = handleJWTError();
+    if (err.name === "TokenExpiredError") newError = handleJWTExpiredError();
 
     productionError(newError, res);
   }

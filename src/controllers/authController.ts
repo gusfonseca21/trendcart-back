@@ -1,3 +1,4 @@
+import { promisify } from "util";
 import { NextFunction, Request, Response } from "express";
 import User from "../models/userModel.js";
 import catchAsync from "../utils/catchAsync.js";
@@ -65,5 +66,58 @@ export const login = catchAsync(
     const token = signToken(user._id.toString());
 
     res.status(200).json({ status: "success", user: loggedUser, token });
+  }
+);
+
+export const protect = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Checar se o token existe
+    let token = undefined;
+
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
+    }
+
+    if (!token) {
+      return next(
+        new AppError("É preciso estar logado para realizar essa ação", 401)
+      );
+    }
+
+    // Validar o token
+    const secret = process.env.JWT_SECRET ?? "";
+    if (!secret) {
+      console.log("Segredo JWT não existe");
+    }
+
+    const decoded = await promisify(
+      jwt.verify
+      // @ts-expect-error Diz que jwt.verify espera apenas um argumento em vez de dois
+    )(token, secret);
+
+    // Checar se o usuário ainda existe
+    const user = await User.findById(decoded.id);
+
+    if (!user)
+      return next(
+        new AppError("O usuário relacionado ao token não existe mais", 401)
+      );
+
+    // Checar se o usuário alterou a senha depois do token ter sido gerado
+    if (user.changedPasswordAfter(decoded.iat)) {
+      return next(
+        new AppError(
+          "O usuário alterou a senha recentemente. Faça o login novamente",
+          401
+        )
+      );
+    }
+
+    // Acessar a rota protegida
+    req.user = user;
+    next();
   }
 );

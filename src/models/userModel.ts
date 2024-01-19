@@ -8,10 +8,12 @@ export interface IUser extends Document {
   password: string;
   photo: string | null;
   createdAt?: Date;
+  passwordChangedAt?: Date;
   correctPassword: (
     candidatePassword: string,
     userPassword: string
   ) => Promise<boolean>;
+  changedPasswordAfter: (JWTTimestap: string) => boolean;
 }
 
 const userSchema = new Schema<IUser>({
@@ -34,6 +36,7 @@ const userSchema = new Schema<IUser>({
     minlength: [4, "A senha deve possuir pelo menos quatro caracteres"],
     select: false,
   },
+  passwordChangedAt: Date,
   photo: {
     type: String,
   },
@@ -59,6 +62,20 @@ userSchema.methods.correctPassword = async function (
   userPassword: string
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp: number) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime(JWTTimestamp) / 1000,
+      10
+    );
+
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  // False = senha não foi alterada
+  return false;
 };
 
 const User = model<IUser, Model<IUser>>("User", userSchema);
