@@ -1,14 +1,20 @@
 import { promisify } from "util";
 import { NextFunction, Request, Response } from "express";
-import User from "../models/userModel.js";
+import User, { IUser, Role } from "../models/userModel.js";
 import catchAsync from "../utils/catchAsync.js";
 import jwt from "jsonwebtoken";
 import AppError from "../utils/appError.js";
 
+interface AuthRequest extends Request {
+  user?: IUser;
+}
+
 interface NewUserRequest extends Request {
   body: {
+    name: string;
     email: string;
     password: string;
+    passwordConfirm: string;
   };
 }
 
@@ -28,8 +34,10 @@ const signToken = (id: string) => {
 
 export const signup = catchAsync(async (req: NewUserRequest, res: Response) => {
   const newUser = await User.create({
+    name: req.body.name,
     email: req.body.email,
     password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
   });
 
   const token = signToken(newUser._id.toString());
@@ -39,7 +47,9 @@ export const signup = catchAsync(async (req: NewUserRequest, res: Response) => {
     token,
     user: {
       id: newUser._id,
+      name: newUser.name,
       email: newUser.email,
+      photo: newUser.photo,
     },
   });
 });
@@ -60,7 +70,9 @@ export const login = catchAsync(
 
     const loggedUser = {
       id: user._id,
+      name: user.name,
       email: user.email,
+      photo: user.photo,
     };
 
     const token = signToken(user._id.toString());
@@ -69,8 +81,9 @@ export const login = catchAsync(
   }
 );
 
+// protect é usado para vefificar se o usuário está logado
 export const protect = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
     // Checar se o token existe
     let token = undefined;
 
@@ -93,10 +106,12 @@ export const protect = catchAsync(
       console.log("Segredo JWT não existe");
     }
 
-    const decoded = await promisify(
-      jwt.verify
-      // @ts-expect-error Diz que jwt.verify espera apenas um argumento em vez de dois
-    )(token, secret);
+    type Decoded = {
+      id: string;
+      iat: string;
+    };
+    //@ts-expect-error Reclamações que não sei como resolver e a aplicação funciona como deveria
+    const decoded: Decoded = await promisify(jwt.verify)(token, secret);
 
     // Checar se o usuário ainda existe
     const user = await User.findById(decoded.id);
@@ -117,7 +132,26 @@ export const protect = catchAsync(
     }
 
     // Acessar a rota protegida
+    // req.user será passado para os próximos middlewares
     req.user = user;
     next();
   }
 );
+
+// restrictTo protege com base na role
+export const restrictTo = (...roles: Role[]) => {
+  return (req: AuthRequest, res: Response, next: NextFunction) => {
+    // req.user (informações de usuário) está vindo do middleware de protect
+    if (!req.user)
+      return next(
+        new AppError("O usuário não possui um tipo especificado", 422)
+      );
+
+    if (!roles.includes(req.user.role))
+      return next(
+        new AppError("Você não possui permissão para realizar esta ação", 403)
+      );
+
+    next();
+  };
+};
