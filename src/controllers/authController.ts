@@ -4,6 +4,8 @@ import User, { IUser, Role } from "../models/userModel.js";
 import catchAsync from "../utils/catchAsync.js";
 import jwt from "jsonwebtoken";
 import AppError from "../utils/appError.js";
+import { sendEmail } from "../utils/email.js";
+import crypto from "crypto";
 
 interface AuthRequest extends Request {
   user?: IUser;
@@ -18,10 +20,23 @@ interface NewUserRequest extends Request {
   };
 }
 
-interface loginRequest extends Request {
+interface LoginRequest extends Request {
   body: {
     email: string;
     password: string;
+  };
+}
+
+interface ForgotRequest extends Request {
+  body: {
+    email: string;
+  };
+}
+
+interface ResetRequest extends Request {
+  body: {
+    password: string;
+    passwordConfirm: string;
   };
 }
 
@@ -55,7 +70,7 @@ export const signup = catchAsync(async (req: NewUserRequest, res: Response) => {
 });
 
 export const login = catchAsync(
-  async (req: loginRequest, res: Response, next: NextFunction) => {
+  async (req: LoginRequest, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -155,3 +170,96 @@ export const restrictTo = (...roles: Role[]) => {
     next();
   };
 };
+
+export const forgotPassword = catchAsync(
+  async (req: ForgotRequest, res: Response, next: NextFunction) => {
+    // Retornar os dados do usuário baseado no email do POST
+
+    if (!req.body?.email) {
+      return next(new AppError("É preciso definir um email", 403));
+    }
+
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+      return next(new AppError("Não existe um usuário com este e-mail", 404));
+    }
+
+    // Gerar token de reset aleatório
+    const resetToken = user.createPasswordResetToken();
+    // validateBeforeSave false irá desabilitar todos os validadores que especificamos durante essa ação
+    await user.save({ validateBeforeSave: false });
+
+    const resetURL = `${req.protocol}://${
+      process.env.NODE_ENV === "development" ? "localhost:3000" : ""
+    }/forgot-password/${resetToken}`;
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("EM PRODUÇÃO ALTERAR O LINK DO PASSWORD RESET");
+    }
+
+    const message = `Esqueceu sua senha? Faça a alteração no seguinte link: ${resetURL}.\nSe você não esqueceu sua senha, ignore este e-mail.`;
+
+    try {
+      await sendEmail({
+        email: req.body.email,
+        subject: "Token de mudança de senha (Valido por 10 min.)",
+        message,
+      });
+
+      res
+        .status(200)
+        .json({ status: "success", message: "Token enviado para o e-mail" });
+    } catch (err) {
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      return next(
+        new AppError(
+          "Houve um erro ao enviar o e-mail. Tente novamente mais tarde.",
+          500
+        )
+      );
+    }
+  }
+);
+
+export const resetPassword = catchAsync(
+  async (req: ResetRequest, res: Response, next: NextFunction) => {
+    // Retornar o usuário com base no token
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    // Validar o token e o usuário
+
+    if (!user) {
+      return next(new AppError("O token é inválido ou expirou", 400));
+    }
+
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+
+    // Logar o usuário
+    const token = signToken(user._id.toString());
+
+    res.status(200).json({
+      status: "success",
+      token,
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      photo: user.photo,
+    });
+  }
+);

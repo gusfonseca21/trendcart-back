@@ -1,5 +1,6 @@
 import { Model, Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import AppError from "../utils/appError.js";
 
 export type Role = "user" | "admin";
@@ -13,17 +14,22 @@ export interface IUser extends Document {
   role: Role;
   createdAt?: Date;
   passwordChangedAt?: Date;
+  passwordResetToken?: string;
+  passwordResetExpires?: Date;
   correctPassword: (
     candidatePassword: string,
     userPassword: string
   ) => Promise<boolean>;
   changedPasswordAfter: (JWTTimestap: string) => boolean;
+  createPasswordResetToken: () => string;
 }
 
 const userSchema = new Schema<IUser>({
   name: {
     type: String,
     required: [true, "Defina um nome"],
+    minLength: [4, "O nome precisa ter mais de 3 caracteres"],
+    maxlength: [15, "O nome não pode ter mais de 15 caracteres"],
   },
   email: {
     type: String,
@@ -57,6 +63,8 @@ const userSchema = new Schema<IUser>({
     },
   },
   passwordChangedAt: Date,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
   photo: {
     type: String,
     default: null,
@@ -107,6 +115,29 @@ userSchema.methods.changedPasswordAfter = function (
   // False = senha não foi alterada
   return false;
 };
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.passwordResetExpires = Date.now() + 20 * 60 * 1000;
+
+  return resetToken;
+};
+
+// Middleware para atualizar o campo de alteração de senha
+userSchema.pre("save", function (next) {
+  // Ignorar esse middleware caso não estejamos alterando nossa senha
+  if (!this.isModified("password") || this.isNew) return next();
+
+  // Atualizamos o campo subtraindo 3 segundos pelo tempo de salvamento no banco não impedir a autenticação do token
+  this.passwordChangedAt = new Date(Date.now() - 1000);
+  next();
+});
 
 const User = model<IUser, Model<IUser>>("User", userSchema);
 
