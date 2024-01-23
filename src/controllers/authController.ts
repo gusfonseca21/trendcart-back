@@ -5,7 +5,7 @@ import catchAsync from "../utils/catchAsync.js";
 import jwt from "jsonwebtoken";
 import AppError from "../utils/appError.js";
 import { sendEmail } from "../utils/email.js";
-import crypto from "crypto";
+import hashToken from "../utils/hashToken.js";
 
 interface AuthRequest extends Request {
   user?: IUser;
@@ -37,6 +37,12 @@ interface ResetRequest extends Request {
   body: {
     password: string;
     passwordConfirm: string;
+  };
+}
+
+interface ValidateResetTokenRequest extends Request {
+  body: {
+    token: string;
   };
 }
 
@@ -228,10 +234,7 @@ export const forgotPassword = catchAsync(
 export const resetPassword = catchAsync(
   async (req: ResetRequest, res: Response, next: NextFunction) => {
     // Retornar o usuário com base no token
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(req.params.token)
-      .digest("hex");
+    const hashedToken = hashToken(req.params.token);
 
     const user = await User.findOne({
       passwordResetToken: hashedToken,
@@ -261,5 +264,22 @@ export const resetPassword = catchAsync(
       email: user.email,
       photo: user.photo,
     });
+  }
+);
+
+export const validateResetToken = catchAsync(
+  async (req: ValidateResetTokenRequest, res: Response, next: NextFunction) => {
+    const hashedToken = hashToken(req.params.token);
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return next(new AppError("O token é inválido ou expirou", 401));
+    } else {
+      res.status(200).json({ status: "success" });
+    }
   }
 );

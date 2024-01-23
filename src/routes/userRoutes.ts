@@ -12,6 +12,7 @@ import {
   restrictTo,
   forgotPassword,
   resetPassword,
+  validateResetToken,
 } from "../controllers/authController.js";
 
 const router = express.Router();
@@ -23,6 +24,8 @@ router.post("/login", login);
 router.post("/forgot-password", forgotPassword);
 
 router.patch("/reset-password/:token", resetPassword);
+
+router.get("/validate-reset-token/:token", validateResetToken);
 
 router.route("/").get(protect, restrictTo("admin"), getAllUsers);
 

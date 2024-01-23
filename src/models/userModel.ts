@@ -2,6 +2,7 @@ import { Model, Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import AppError from "../utils/appError.js";
+import hashToken from "../utils/hashToken.js";
 
 export type Role = "user" | "admin";
 
@@ -119,10 +120,7 @@ userSchema.methods.changedPasswordAfter = function (
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString("hex");
 
-  this.passwordResetToken = crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
+  this.passwordResetToken = hashToken(resetToken);
 
   this.passwordResetExpires = Date.now() + 20 * 60 * 1000;
 
