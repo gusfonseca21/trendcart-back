@@ -1,11 +1,10 @@
-import { Model, Schema, model } from "mongoose";
+import { Model, Schema, model, ObjectId, SchemaType } from "mongoose";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import AppError from "../utils/appError.js";
 import hashToken from "../utils/hashToken.js";
 
 export type Role = "user" | "admin";
-
 export interface IUser extends Document {
   name: string;
   email: string;
@@ -23,6 +22,10 @@ export interface IUser extends Document {
   ) => Promise<boolean>;
   changedPasswordAfter: (JWTTimestap: string) => boolean;
   createPasswordResetToken: () => string;
+  cart: {
+    productId: string;
+    quantity: number;
+  }[];
 }
 
 const userSchema = new Schema<IUser>({
@@ -80,6 +83,19 @@ const userSchema = new Schema<IUser>({
     default: Date.now(),
     select: false,
   },
+  cart: [
+    {
+      productId: {
+        type: String,
+        required: [true, "É necessário definir o id do produto como string"],
+      },
+      quantity: {
+        type: Number,
+        required: [true, "É preciso definir uma quantidade"],
+        min: 1,
+      },
+    },
+  ],
 });
 
 userSchema.pre("save", async function (next) {

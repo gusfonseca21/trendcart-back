@@ -7,8 +7,13 @@ const DB = process.env.DATABASE;
 
 void (async () => {
   if (DB) {
-    await mongoose.connect(DB);
-    console.log("Servidor conectado com sucesso");
+    try {
+
+      await mongoose.connect(DB);
+      console.log("Servidor conectado com sucesso");
+    } catch(error) {
+      console.log("Houve um erro ao tentar se conectar na base de dados: ", error)
+    }
   } else console.log("Base de dados não definida");
 })();
 
@@ -17,8 +22,8 @@ async function importData() {
   try {
     await Product.create(products);
     console.log("Dados importados com sucesso");
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log("Erro na importação de dados para o banco de dados: ", error);
   }
 }
 
@@ -27,8 +32,8 @@ async function deleteData() {
   try {
     await Product.deleteMany();
     console.log("Os dados foram deletados com sucesso");
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log("Erro na exclusão de dados no banco de dados: ", error);
   }
 }
 

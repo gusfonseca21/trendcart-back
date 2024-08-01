@@ -15,8 +15,12 @@ const DB = process.env.DATABASE;
 
 void (async () => {
   if (DB) {
-    await mongoose.connect(DB);
-    console.log("Servidor conectado com sucesso");
+    try {
+      await mongoose.connect(DB);
+      console.log("Servidor conectado com sucesso");
+    } catch(error) {
+      console.log("Houve um erro ao tentar se conectar com a base de dados: ", error);
+    }
   } else {
     console.log("Não há base de dados definida");
   }
@@ -28,9 +32,9 @@ const server: Server = app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
 
-process.on("unhandledRejection", (err: Error) => {
+process.on("unhandledRejection", (error: Error) => {
   console.log("REJEIÇÃO NÃO TRATADA! Desligando o servidor...");
-  console.log(err);
+  console.log(error);
 
   server.close(() => {
     process.exit(1);

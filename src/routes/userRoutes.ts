@@ -4,6 +4,7 @@ import {
   getUser,
   updateUser,
   deleteUser,
+  addInCart,
 } from "../controllers/userController.js";
 import {
   login,
@@ -28,11 +29,12 @@ router.patch("/reset-password/:token", resetPassword);
 router.get("/validate-reset-token/:token", validateResetToken);
 
 router.route("/").get(protect, restrictTo("admin"), getAllUsers);
-
 router
   .route("/:id")
   .get(getUser)
   .put(protect, restrictTo("admin"), updateUser)
   .delete(protect, restrictTo("admin"), deleteUser);
+
+router.route("/:id/cart").post(addInCart);
 
 export default router;
